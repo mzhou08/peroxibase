@@ -1,36 +1,42 @@
-from Bio.Blast import NCBIWWW
+from Bio.Blast.Applications import NcbiblastpCommandline
+import pandas as pd
+from io import StringIO
+from Bio.Blast import NCBIXML
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
 
-from Bio.Blast import NCBIXML
 
-import os, ssl
-if (not os.environ.get('PYTHONHTTPSVERIFY', '') and 
-    getattr(ssl, '_create_unverified_context', None)): 
-    ssl._create_default_https_context = ssl._create_unverified_context 
 
-record = SeqIO.read("./2369.fasta", format="fasta")
+df = pd.read_csv("./fasta.csv")
+# add new column
+df["uniprot_id"] = ""
+df["protein_id"] = ""
 
-print(record)
+## fasta format 
+## >ID|NAME|...
+## SEQUENCE VALUE
+## empty line
+line_count = 1
+not_found_count = 0
+found_count = 0
+for index, row in df.iterrows():
+    # init
+    fasta_value = row["Fasta"]
+    # Create two sequence files
+    query_seq=SeqRecord(Seq(fasta_value),id="query_seq")
+    SeqIO.write(query_seq, "query_seq.fasta", "fasta")
 
-result_handle = NCBIWWW.qblast("blastp", "nt", record.seq, url_base='https://blast.ncbi.nlm.nih.gov/Blast.cgi', entrez_query="txid4932[ORGN]")
-
-print("after")
-
-with open("my_blast.xml", "w") as out_handle:
-    out_handle.write(result_handle.read())
-result_handle.close()
-
-result_handle = open("my_blast.xml")
-blast_records = NCBIXML.parse(result_handle)
-E_VALUE_THRESH = 0.04
-for blast_record in blast_records:
-    for alignment in blast_record.alignments:
+    # Run BLAST and parse the output as XML
+    output = NcbiblastpCommandline(query="query_seq.fasta", subject="yeast.fasta", outfmt=5)()[0]
+    blast_result_record = NCBIXML.read(StringIO(output))
+    # Print some information on the result
+    for alignment in blast_result_record.alignments:
         for hsp in alignment.hsps:
-            if hsp.expect < E_VALUE_THRESH:
-                print("****Alignment****")
-                print("sequence:", alignment.title)
-                print("length:", alignment.length)
-                print("e value:", hsp.expect)
-                print(hsp.query[0:75] + "...")
-                print(hsp.match[0:75] + "...")
-                print(hsp.sbjct[0:75] + "...")
+            print(f"""\n\n****{row['Name']} Alignment with yeast ****""")
+            print('sequence:', alignment.title)
+            print('length:', alignment.length)
+            print('e value:', hsp.expect)
+            print(hsp.query)
+            print(hsp.match)
+            print(hsp.sbjct)
