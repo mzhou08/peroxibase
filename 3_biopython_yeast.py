@@ -28,7 +28,9 @@ for index, row in df.iterrows():
     SeqIO.write(query_seq, "query_seq.fasta", "fasta")
 
     # Run BLAST and parse the output as XML
-    output = NcbiblastpCommandline(query="query_seq.fasta", subject="yeast.fasta", outfmt=5)()[0]
+    cline = NcbiblastpCommandline(query="query_seq.fasta", subject="yeast.fasta", outfmt=5)
+    print(cline)
+    output = cline()[0]
     blast_result_record = NCBIXML.read(StringIO(output))
     # Print some information on the result
     for alignment in blast_result_record.alignments:
