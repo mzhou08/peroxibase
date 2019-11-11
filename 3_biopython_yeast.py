@@ -20,25 +20,33 @@ df["protein_id"] = ""
 line_count = 1
 not_found_count = 0
 found_count = 0
+
+# form the query string from peroxibase sequences
+fasta_value=""
 for index, row in df.iterrows():
     # init
-    fasta_value = row["Fasta"]
-    # Create two sequence files
-    query_seq=SeqRecord(Seq(fasta_value),id="query_seq")
-    SeqIO.write(query_seq, "query_seq.fasta", "fasta")
+    fasta_value = fasta_value + row["Fasta"]
+print(fasta_value)
 
-    # Run BLAST and parse the output as XML
-    cline = NcbiblastpCommandline(query="query_seq.fasta", subject="yeast.fasta", outfmt=5)
-    print(cline)
-    output = cline()[0]
-    blast_result_record = NCBIXML.read(StringIO(output))
-    # Print some information on the result
-    for alignment in blast_result_record.alignments:
-        for hsp in alignment.hsps:
-            print(f"""\n\n****{row['Name']} Alignment with yeast ****""")
-            print('sequence:', alignment.title)
-            print('length:', alignment.length)
-            print('e value:', hsp.expect)
-            print(hsp.query)
-            print(hsp.match)
-            print(hsp.sbjct)
+# Create two sequence files
+query_seq=SeqRecord(Seq(fasta_value),id="query_seq")
+SeqIO.write(query_seq, "peroxibase.fasta", "fasta")
+
+# Run BLAST and parse the output as XML
+cline = NcbiblastpCommandline(query="peroxibase.fasta", subject="GCF_000146045.2_R64_protein.faa", 
+                outfmt='6 qseqid sseqid qstart qend evalue', 
+                out="output.txt", evalue=1e-5)
+print(cline)
+output = cline()[0]
+#blast_result_record = NCBIXML.read(StringIO(output))
+print(StringIO(output))
+# Print some information on the result
+#for alignment in blast_result_record.alignments:
+#    for hsp in alignment.hsps:
+#        print(f"""\n\n****{row['Name']} Alignment with yeast ****""")
+#        print('sequence:', alignment.title)
+#        print('length:', alignment.length)
+#        print('e value:', hsp.expect)
+#        print(hsp.query)
+#        print(hsp.match)
+#        print(hsp.sbjct)
