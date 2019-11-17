@@ -11,7 +11,7 @@ df = pd.read_excel('./RedOxiBase_Bacteroidetes_Chlorobi.xlsx', sheet_name='Sheet
 df["Fasta"] = ""
 
 # prepare to output new csv file with fasta info
-os.remove("fasta.csv")
+#os.remove("fasta.csv")
 for index, row in df.iterrows():
     id = row["Id"]
     df.at[index, "Name"]=row["Name"].strip()
@@ -20,7 +20,7 @@ for index, row in df.iterrows():
 
     #This will get fasta
     fasta = tree.xpath('//textarea[@name="task_data_input"]/text()')
-    print(fasta)
-    df.at[index, "Fasta"] = fasta
+    print(fasta[0])
+    df.at[index, "Fasta"] = fasta[0]
 
 df.to_csv(r'fasta.csv',index=False)

@@ -21,6 +21,7 @@ found_count = 0
 for index, row in df.iterrows():
     # init
     sequence_name = row["Name"]
+    print(sequence_name)
     uniprot_id = ""
     protein_id = ""
 
@@ -30,17 +31,17 @@ for index, row in df.iterrows():
     page_string = page.content
     if "Sorry, no results found for your search term" in str(page_string):
         not_found_count = not_found_count + 1
-        #print(f"""Cannot find {sequence_name} in UniProtKB. """)
+        print(f"""Cannot find {sequence_name} in UniProtKB. """)
     else:
         found_count = found_count + 1
         tree = html.fromstring(page_string)
-        #print(page_string)
+        print(page_string)
         #This will get uniprot_id
         uniprot_id_list = tree.xpath("//a[starts-with(@href, '/uniprot/') and not (starts-with(@href, '/uniprot/?'))]/text()")
         uniprot_id=uniprot_id_list[0]
         df.at[index, "uniprot_id"] = uniprot_id
         #print(uniprot_id)
-        #print(f"""https://modbase.compbio.ucsf.edu/modbase-cgi/model_search.cgi?searchkw=name&kword={uniprot_id}""")
+        print(f"""https://modbase.compbio.ucsf.edu/modbase-cgi/model_search.cgi?searchkw=name&kword={uniprot_id}""")
 
         # use the uniprot_id to query uniprot
         modbase_page = requests.get(f"""https://modbase.compbio.ucsf.edu/modbase-cgi/model_search.cgi?searchmode=default&displaymode=moddetail&searchproperties=database_id&searchvalue={uniprot_id}&organism=ALL&organismtext=""")

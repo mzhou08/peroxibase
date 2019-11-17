@@ -29,12 +29,16 @@ for index, row in df.iterrows():
 print(fasta_value)
 
 # Create two sequence files
-query_seq=SeqRecord(Seq(fasta_value),id="query_seq")
-SeqIO.write(query_seq, "peroxibase.fasta", "fasta")
+#query_seq=SeqRecord(Seq(fasta_value),id="query_seq")
+#SeqIO.write(query_seq, "peroxibase.fasta", "fasta")
+f= open("peroxibase.fasta", "w+")
+f.write(fasta_value)
+f.close()
 
 # Run BLAST and parse the output as XML
 cline = NcbiblastpCommandline(query="peroxibase.fasta", subject="GCF_000146045.2_R64_protein.faa", 
-                outfmt='6 qseqid sseqid qstart qend evalue', 
+                #outfmt='6 qseqid sseqid qstart qend evalue', 
+                outfmt='6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore', 
                 out="output.txt", evalue=1e-5)
 print(cline)
 output = cline()[0]
