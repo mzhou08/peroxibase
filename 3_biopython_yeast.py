@@ -8,7 +8,7 @@ from Bio import SeqIO
 
 
 
-df = pd.read_csv("./fasta.csv")
+df = pd.read_csv("./result_1_fasta.csv")
 # add new column
 df["uniprot_id"] = ""
 df["protein_id"] = ""
@@ -39,7 +39,7 @@ f.close()
 cline = NcbiblastpCommandline(query="peroxibase.fasta", subject="GCF_000146045.2_R64_protein.faa", 
                 #outfmt='6 qseqid sseqid qstart qend evalue', 
                 outfmt='6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore', 
-                out="output.txt", evalue=1e-5)
+                out="result_3_output.csv", evalue=1e-5)
 print(cline)
 output = cline()[0]
 #blast_result_record = NCBIXML.read(StringIO(output))

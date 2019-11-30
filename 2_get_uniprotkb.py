@@ -6,7 +6,7 @@ import pandas as pd
 from pandas import ExcelWriter
 from pandas import ExcelFile
 
-df = pd.read_csv("./fasta.csv")
+df = pd.read_csv("./result_1_fasta.csv")
 # add new column
 df["uniprot_id"] = ""
 df["protein_id"] = ""
@@ -67,7 +67,7 @@ for index, row in df.iterrows():
         #else:
             #print("no protein found")
         
-df.to_csv(r'./uniprot_protein.csv',index=False)
+df.to_csv(r'./result_2_uniprot_protein.csv',index=False)
 
 
 

@@ -12,7 +12,7 @@ from Bio import SeqIO
 # catalase class name
 class_name = "Manganese Catalase"
 
-df = pd.read_csv("./fasta.csv")
+df = pd.read_csv("./result_1_fasta.csv")
 ## fasta format 
 ## >ID|NAME|...
 ## SEQUENCE VALUE
