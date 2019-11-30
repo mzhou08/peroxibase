@@ -1,0 +1,46 @@
+(
+(
+(
+(
+(
+(
+(
+8405|MpaKat01| [Mucilaginibacter_paludis]|Bacteroidetes/Chlorobi|Catalase|complete|:0.276789
+,
+7232|RmaKat| [Rhodothermus_marinus_(Rhodothermus_obamensis)]|Bacteroidetes/Chlorobi|Catalase|complete|:0.275282
+):0.46882
+,
+7267|CgleKat01| [Chryseobacterium_gleum]|Bacteroidetes/Chlorobi|Catalase|complete|:0.256674
+):0.0276642
+,
+(
+7265|CatKat01| [Croceibacter_atlanticus]|Bacteroidetes/Chlorobi|Catalase|complete|:0.181388
+,
+7261|GfoKat01| [Gramella_forsetii]|Bacteroidetes/Chlorobi|Catalase|complete|:0.148787
+):0.141656
+):0.00854167
+,
+7262|FbKat01| [Flavobacteriaceae_bacterium]|Bacteroidetes/Chlorobi|Catalase|complete|:0.283735
+):0.0103837
+,
+6288|FjKat01| [Flavobacterium_johnsoniae]|Bacteroidetes/Chlorobi|Catalase|complete|:0.255258
+):0.00681715
+,
+(
+7255|PhepKat01| [Pedobacter_heparinus]|Bacteroidetes/Chlorobi|Catalase|complete|:0.201109
+,
+7254|SpliKat01| [Spirosoma_linguale]|Bacteroidetes/Chlorobi|Catalase|complete|:0.216974
+):0.0163764
+):0.0270586
+,
+(
+(
+7258|DferKat01| [Dyadobacter_fermentans]|Bacteroidetes/Chlorobi|Catalase|complete|:0.15505
+,
+7256|CHpiKat01| [Chitinophaga_pinensis]|Bacteroidetes/Chlorobi|Catalase|complete|:0.162365
+):0.0115329
+,
+6280|PEspKat01| [Pedobacter_sp._BAL39]|Bacteroidetes/Chlorobi|Catalase|complete|:0.149693
+):0.0270586
+)
+;
