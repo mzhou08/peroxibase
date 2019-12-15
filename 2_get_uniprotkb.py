@@ -9,7 +9,8 @@ from pandas import ExcelFile
 df = pd.read_csv("./result_1_fasta.csv")
 # add new column
 df["uniprot_id"] = ""
-df["protein_id"] = ""
+df["modbase_id"] = ""
+df["swiss_model_id"] = ""
 
 ## fasta format 
 ## >ID|NAME|...
@@ -22,6 +23,7 @@ for index, row in df.iterrows():
     # init
     sequence_name = row["Name"]
     print(sequence_name)
+
     uniprot_id = ""
     protein_id = ""
 
@@ -35,13 +37,30 @@ for index, row in df.iterrows():
     else:
         found_count = found_count + 1
         tree = html.fromstring(page_string)
-        print(page_string)
+        #print(page_string)
+
         #This will get uniprot_id
         uniprot_id_list = tree.xpath("//a[starts-with(@href, '/uniprot/') and not (starts-with(@href, '/uniprot/?'))]/text()")
         uniprot_id=uniprot_id_list[0]
         df.at[index, "uniprot_id"] = uniprot_id
+
+        # get the uniprot id page
+        uniprot_page = requests.get(f"""https://www.uniprot.org/uniprot/{uniprot_id}""")
+        uniprot_page_string = uniprot_page.content
+        uniprot_page_tree = html.fromstring(uniprot_page_string)
+        #This will get SWISS-MODEL REPOSITORY (SMR)
+        swiss_model_id_list = uniprot_page_tree.xpath("//a[starts-with(@href, 'https://swissmodel.expasy.org/repository/uniprot/')]/text()")
+        print(len(swiss_model_id_list))
+        if len(swiss_model_id_list) != 0:
+            swiss_model_id = swiss_model_id_list[0]
+            df.at[index, "swiss_model_id"] = swiss_model_id
+            print(swiss_model_id)
+
+
+
+
         #print(uniprot_id)
-        print(f"""https://modbase.compbio.ucsf.edu/modbase-cgi/model_search.cgi?searchkw=name&kword={uniprot_id}""")
+        #print(f"""https://modbase.compbio.ucsf.edu/modbase-cgi/model_search.cgi?searchkw=name&kword={uniprot_id}""")
 
         # use the uniprot_id to query uniprot
         modbase_page = requests.get(f"""https://modbase.compbio.ucsf.edu/modbase-cgi/model_search.cgi?searchmode=default&displaymode=moddetail&searchproperties=database_id&searchvalue={uniprot_id}&organism=ALL&organismtext=""")
@@ -62,7 +81,7 @@ for index, row in df.iterrows():
         protein_id_list=modbase_page_tree.xpath("//a[starts-with(@href, 'http://www.rcsb.org/pdb/explore/explore.do?structureId=')]/text()")
         if len(protein_id_list) > 0:
             protein_id = protein_id_list[0]
-            df.at[index, "protein_id"] = protein_id
+            df.at[index, "modbase_id"] = protein_id
             #print(f"""found protein_id {protein_id}""")
         #else:
             #print("no protein found")
