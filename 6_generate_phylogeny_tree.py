@@ -6,7 +6,7 @@ from Bio.Phylo.Applications import PhymlCommandline
 from Bio.Phylo.PAML import codeml
 from Bio.Phylo.PhyloXML import Phylogeny
 
-tree = Phylo.read("./muscle_Catalase.phy", "newick")
+tree = Phylo.read("./muscle_fasta_three_yeast.phy", "newick")
 print(tree)
 
 
